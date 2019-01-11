@@ -1,0 +1,65 @@
+import os
+import time
+import tkinter as tk
+import tkinter.messagebox
+
+
+class APP:
+    def __init__(self, root):
+        self.frame = tk.Frame(root)
+
+    def precise_time(self):  # provide a precise time to shotdown pc
+
+        try:
+            self.time1 = time.strptime(self.e.get(), "%Y-%m-%d %H:%M:%S")
+            self.time2 = int(time.mktime(self.time1))
+            self.now = int(time.time())
+
+            last = self.time2 - self.now
+            if last < 0:
+                self.precise_time()
+            _p1 = str(last) + ' to shutdown'
+            os.system('shutdown -s -t  %d' % last)
+            tkinter.messagebox.showinfo('Last time', _p1)  # 2019-1-11 17:54:56
+        except:
+
+            tkinter.messagebox.showwarning('warning', 'something is wrong, pls try it again')
+
+    def fixed_time(self):
+        try:
+            self.time1 = self.e.get()
+
+            self.time2 = int(self.time1)
+            self.time2 = self.time2 *60
+            self.time1= str(self.time2)
+            if self.time2 < 0:
+                self.precise_time()
+            _p1 = str(self.time1) + ' to shutdown'
+            os.system('shutdown -s -t  %d' % self.time2)
+            tkinter.messagebox.showinfo('Last time', _p1)  # 2019-1-11 17:54:56
+        except:
+
+            tkinter.messagebox.showwarning('warning', 'something is wrong, pls try it again')
+
+    def no_god_pls_no(self):
+        os.system('shutdown -a')
+        tkinter.messagebox.showinfo('hello', 'you are safe')
+
+    def create_ui(self):
+        tk.Label(root, text="please input time of shutdown as %Y-%m-%d %H:%M:%S").grid(row=0)
+        self.e = tk.Entry(root)
+        self.e.insert(0, '')
+        self.e.grid(row=1, padx=20, pady=20)
+
+        tk.Button(root, text="set", width=10, command=self.precise_time).grid(row=2,padx=5, pady=5)
+        tk.Button(root, text="fixed time", width=10, command=self.fixed_time).grid(row=3,padx=5,pady=5)
+
+        tk.Button(root, text="noooo", width=10, command=self.no_god_pls_no).grid(row=4, padx=5, pady=5)
+
+
+if __name__ == '__main__':
+    root = tk.Tk()
+    app = APP(root)
+    app.create_ui()
+
+    root.mainloop()
